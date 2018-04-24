@@ -1,0 +1,9 @@
+[localhost]
+localhost ansible_connection=local
+
+[docker-host:child]
+localhost
+
+[loadbalancers]
+lb1
+lb2

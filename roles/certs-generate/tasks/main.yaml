@@ -1,0 +1,36 @@
+---
+- name: "Check required variables"
+  fail: msg="Variable '{{ item }}' is not defined"
+  when: item not in vars
+  with_items: "{{required_vars}}"
+
+- name: ensure that certs target directory exists
+  file: path="{{ certsgen_output_dir }}/{{ aws_target_domain }}/{{item}}" state=directory
+  with_items:
+    - ssl-certs
+    - nginx-confs/conf.d/domains/http
+    - nginx-confs/conf.d/domains/https
+
+- name: run cert-gen container and generate certs
+  docker_container:
+    name: cert_gen
+    image: sergioalvares/certbot-aws-route53:0.1
+    state: started
+    env:
+      DOMAIN: "{{ aws_target_domain }}"
+      EMAIL: "{{ admin_email }}"
+      AWS_ACCESS_KEY_ID: "{{ aws_access_key_id }}"
+      AWS_SECRET_ACCESS_KEY: "{{ aws_secret_access_key }}"
+      TZPATH: "America/Chicago"
+      AWS_DEFAULT_REGION: "us-east-1"
+    keep_volumes: true
+    volumes:
+      - "{{ certs_output_dir }}/{{ aws_target_domain }}/ssl-certs":/etc/letsencrypt
+
+- name: create nginx confs for created certs
+  template:
+    src: "{{ item }}/template.conf.j2"
+    dest: "{{ certs_output_dir }}/{{ aws_target_domain }}/nginx-confs/{{ item }}/{{ aws_target_domain }}"
+  with_items:
+    - conf.d/domains/http
+    - conf.d/domains/https

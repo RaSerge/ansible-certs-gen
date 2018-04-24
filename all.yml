@@ -1,0 +1,13 @@
+- hosts: localhost
+  become: yes
+  roles:
+    - certs-generate
+
+- hosts: loadbalancers
+  become: yes
+  tasks:
+    - name: Transfer ssl and conf files file to loadbalancers
+      synchronize:
+        src: /path/on/localhost
+        dest: /path/on/loadbalancers
+      delegate_to: localhost

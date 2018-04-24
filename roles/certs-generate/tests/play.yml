@@ -1,0 +1,9 @@
+- hosts: localhost
+  vars:
+    aws_target_domain: FakeTarget
+    aws_access_key_id: FakeKeyId
+    aws_secret_access_key: FakeKeyFakeKey
+    admin_email: my@mail.com
+
+  roles:
+    - certs-generate
