@@ -14,8 +14,7 @@
 - name: run cert-gen container and generate certs
   docker_container:
     name: cert_gen
-    image: sergioalvares/certbot-aws-route53:0.1
-    state: started
+    image: sergioalvares/certbot-aws-route53:0.2
     env:
       DOMAIN: "{{ aws_target_domain }}"
       EMAIL: "{{ admin_email }}"
@@ -25,12 +24,12 @@
       AWS_DEFAULT_REGION: "us-east-1"
     keep_volumes: true
     volumes:
-      - "{{ certs_output_dir }}/{{ aws_target_domain }}/ssl-certs":/etc/letsencrypt
+      - "{{ certsgen_output_dir }}/{{ aws_target_domain }}/ssl-certs:/etc/letsencrypt"
 
 - name: create nginx confs for created certs
   template:
     src: "{{ item }}/template.conf.j2"
-    dest: "{{ certs_output_dir }}/{{ aws_target_domain }}/nginx-confs/{{ item }}/{{ aws_target_domain }}"
+    dest: "{{ certsgen_output_dir }}/{{ aws_target_domain }}/nginx-confs/{{ item }}/{{ aws_target_domain }}"
   with_items:
     - conf.d/domains/http
     - conf.d/domains/https
