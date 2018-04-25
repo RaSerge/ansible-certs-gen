@@ -1,0 +1,8 @@
+[localhost]
+localhost ansible_connection=local
+
+[docker-host:child]
+localhost
+
+[loadbalancers]
+54.93.89.94 ansible_connection=ssh  ansible_user=deployer

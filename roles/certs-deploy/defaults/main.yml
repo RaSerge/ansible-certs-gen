@@ -1,0 +1,3 @@
+required_vars:
+  - aws_target_domain
+  - source_hostname
