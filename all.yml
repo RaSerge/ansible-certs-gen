@@ -1,13 +1,11 @@
-- hosts: localhost
+- hosts: docker-host
   become: yes
   roles:
     - certs-generate
 
 - hosts: loadbalancers
+  vars:
+    source_hostname: "{{ groups['docker-host'][0] }}"
   become: yes
-  tasks:
-    - name: Transfer ssl and conf files file to loadbalancers
-      synchronize:
-        src: /path/on/localhost
-        dest: /path/on/loadbalancers
-      delegate_to: localhost
+  roles:
+    - certs-deploy
