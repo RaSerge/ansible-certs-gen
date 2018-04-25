@@ -4,7 +4,8 @@ server {
 
   server_name {{ aws_target_domain }};
 
-  status_zone "adblock:{{ aws_target_domain }}";
+  #commented for testing purposes
+  #status_zone "adblock:{{ aws_target_domain }}";
 
   include /etc/nginx/conf.d/include_ssl;
   ssl_certificate /etc/letsencrypt/live/{{ aws_target_domain }}/fullchain.pem;

@@ -33,3 +33,20 @@
   with_items:
     - conf.d/domains/http
     - conf.d/domains/https
+
+- name: Synchronization of src on the inventory host to the dest on the localhost in pull mode
+  synchronize:
+    mode: pull
+    src: "{{ certsgen_output_dir }}/{{ aws_target_domain }}/"
+    dest: "/tmp/{{ aws_target_domain }}/"
+    links: yes
+    recursive: yes
+    delete: yes
+
+- name: Fix permissions
+  file: path="/tmp/{{ aws_target_domain }}/ssl-certs/{{ item }}" state=directory mode=0755 owner=root
+  with_items:
+    - live
+    - archive
+  tags:
+    - checks

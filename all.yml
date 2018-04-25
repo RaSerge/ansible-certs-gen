@@ -4,8 +4,6 @@
     - certs-generate
 
 - hosts: loadbalancers
-  vars:
-    source_hostname: "{{ groups['docker-host'][0] }}"
   become: yes
   roles:
     - certs-deploy

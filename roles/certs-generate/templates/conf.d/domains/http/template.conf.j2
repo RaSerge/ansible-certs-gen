@@ -2,7 +2,8 @@ server {
   listen *:80;
 
   server_name {{ aws_target_domain }};
-  status_zone "adblock:{{ aws_target_domain }}";
+  #commented for testing purposes
+  #status_zone "adblock:{{ aws_target_domain }}";
 
   access_log /var/log/nginx/{{ aws_target_domain }}_d_access.log main;
 
