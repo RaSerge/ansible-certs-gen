@@ -11,10 +11,12 @@ For local env:
 4. The user used in playbook `play` must have ssh (auth by key is strongly recommended) access to "loadbalancer" node with passwordless sudo permissions.
 
 ##Arguments (passable variables)
-Required:
-  aws_target_domain=<OUR_AWS_DOMAIN>
+###Required:
 
-Optional:
+  `aws_target_domain`=<OUR_AWS_DOMAIN>
+
+###Optional:
+
   `generate_ssl_cert`=true/false(default) <define when you want to generate new letsencrypt certificate>
   `aws_access_key_id`=<AWS_ACCESS_KEY_ID>         #
   `aws_secret_access_key`=<AWS_SECRET_ACCESS_KEY> # This vars should be defined if you want to generate/renew letsencrypt certificates (when `generate_ssl_cert`/`renew_ssl_cert` is defined)
