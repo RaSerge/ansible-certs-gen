@@ -25,4 +25,15 @@ For local env:
   * `deploy_ssl_cert`=true/false(default) <define when you want to deploy generated/renewed letsencrypt certificate>
 
 ## USAGE
-    ansible-playbook -i inventories/local all.yaml --extra-vars "aws_target_domain=<OUR_AWS_DOMAIN> aws_access_key_id=<AWS_ACCESS_KEY_ID> aws_secret_access_key=<AWS_SECRET_ACCESS_KEY> admin_email=<YOUR_EMAIL_HERE>"
+1. When we want to generate new letsencrypt certificate
+```
+ansible-playbook -i inventories/testing all.yaml --extra-vars "aws_target_domain=<OUR_AWS_DOMAIN> generate_ssl_cert=true aws_access_key_id=<AWS_ACCESS_KEY_ID> aws_secret_access_key=<AWS_SECRET_ACCESS_KEY> admin_email=<YOUR_EMAIL_HERE> --ask-sudo --private-key=~/.ssh/<YOUR_PRIVATE_KEY>"
+```
+2. When we want to deploy nginx http configuration
+```
+ansible-playbook -i inventories/testing all.yaml --extra-vars "aws_target_domain=<OUR_AWS_DOMAIN> deploy_nginx_conf=true --ask-sudo --private-key=~/.ssh/<YOUR_PRIVATE_KEY>"
+```
+3. When we want to deploy nginx http/https configurations and new/renewed certificates
+```
+ansible-playbook -i inventories/testing all.yaml --extra-vars "aws_target_domain=<OUR_AWS_DOMAIN> deploy_nginx_conf=true deploy_ssl_cert=true --ask-sudo --private-key=~/.ssh/<YOUR_PRIVATE_KEY>"
+```
