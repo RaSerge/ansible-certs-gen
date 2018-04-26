@@ -15,10 +15,12 @@ Required:
   aws_target_domain=<OUR_AWS_DOMAIN>
 
 Optional:
-  aws_access_key_id=<AWS_ACCESS_KEY_ID>         #
-  aws_secret_access_key=<AWS_SECRET_ACCESS_KEY> # This vars should be defined if you want to generate/renew letsencrypt certs/
-  admin_email=<YOUR_EMAIL_HERE>"                #
-
+  `generate_ssl_cert`=true/false(default) <define when you want to generate new letsencrypt certificate>
+  `aws_access_key_id`=<AWS_ACCESS_KEY_ID>         #
+  `aws_secret_access_key`=<AWS_SECRET_ACCESS_KEY> # This vars should be defined if you want to generate/renew letsencrypt certificates (when `generate_ssl_cert`/`renew_ssl_cert` is defined)
+  `admin_email`=<YOUR_EMAIL_HERE>"                #
+  `deploy_nginx_conf`=true/false(default) <define when you want to deploy generated nginx conf. By default will be deployed http conf. If `deploy_ssl_cert` is defined also will be deployed https >
+  `deploy_ssl_cert`=true/false(default) <define when you want to deploy generated/renewed letsencrypt certificate>
 
 
 ##USAGE
