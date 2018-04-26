@@ -1,0 +1,39 @@
+---
+- name: "Check required variables"
+  fail: msg="Variable '{{ item }}' is not defined"
+  when: item not in vars
+  with_items: "{{required_vars}}"
+  tags:
+    - checks
+
+- name: "Transfer http conf files file to loadbalancers"
+  synchronize:
+    mode: push
+    src: "/tmp/{{ aws_target_domain }}/nginx-confs/{{ item }}/{{ aws_target_domain }}"
+    dest: "/etc/nginx/{{ item }}/"
+    recursive: yes
+    delete: yes
+  with_items:
+    - conf.d/domains/http
+    - conf.d/domains/https
+  delegate_to: localhost
+
+- name: "Transfer https conf files file to loadbalancers"
+  synchronize:
+    mode: push
+    src: "/tmp/{{ aws_target_domain }}/nginx-confs/{{ item }}/{{ aws_target_domain }}"
+    dest: "/etc/nginx/{{ item }}/"
+    recursive: yes
+    delete: yes
+  when: deploy_ssl_cert
+  with_items:
+    - conf.d/domains/http
+    - conf.d/domains/https
+  delegate_to: localhost
+
+- name: validate nginx configuration
+  command: nginx -t
+  changed_when: False
+
+- name: reload nginx
+  service: name=nginx state=reloaded

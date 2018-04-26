@@ -1,0 +1,21 @@
+server {
+  #{{ ansible_managed }}
+  listen *:443 ssl;
+
+  server_name {{ aws_target_domain }};
+
+  #commented for testing purposes
+  #status_zone "adblock:{{ aws_target_domain }}";
+
+  include /etc/nginx/conf.d/include_ssl;
+  ssl_certificate /etc/letsencrypt/live/{{ aws_target_domain }}/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/{{ aws_target_domain }}/privkey.pem;
+
+  access_log /var/log/nginx/{{ aws_target_domain }}_d_access.log main;
+
+  include /etc/nginx/conf.d/upstreams_log;
+  include /etc/nginx/conf.d/favicon;
+  include /etc/nginx/conf.d/google_takeme;
+  include /etc/nginx/conf.d/locations_main_include;
+  include /etc/nginx/conf.d/locations_main_adblock;
+}

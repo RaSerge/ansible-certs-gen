@@ -1,9 +1,13 @@
-- hosts: docker-host
+- name: Generate letsencrypt certificates
+  hosts: docker-host
   become: yes
   roles:
-    - certs-generate
+    - generate-nginx-confs
+    - { role: generate-ssl-certs, when: generate_ssl_cert }
 
-- hosts: loadbalancers
+- name: Deploy configurations on loadbalancers
+  hosts: loadbalancers
   become: yes
   roles:
-    - certs-deploy
+    - { role: deploy-nginx-conf, when: deploy_nginx_conf }
+    - { role: deploy-certs, when: deploy_ssl_cert }

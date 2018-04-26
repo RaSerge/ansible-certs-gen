@@ -6,11 +6,6 @@
   tags:
     - checks
 
-# - name: "Ensure that nginx target directories exists"
-#   file: path=/etc/nginx/conf.d/domains/http/{{ aws_target_domain }} state=file mode=0644
-#   tags:
-#     - checks
-
 - name: "Ensure that ssl target directories exists"
   file: path=/etc/letsencrypt/{{ item }}/{{ aws_target_domain }} state=directory mode=0755 owner=root
   with_items:
@@ -18,18 +13,6 @@
     - live
   tags:
     - checks
-
-- name: "Transfer nginx conf files file to loadbalancers"
-  synchronize:
-    mode: push
-    src: "/tmp/{{ aws_target_domain }}/nginx-confs/{{ item }}/{{ aws_target_domain }}"
-    dest: "/etc/nginx/{{ item }}/"
-    recursive: yes
-    delete: yes
-  with_items:
-    - conf.d/domains/http
-    - conf.d/domains/https
-  delegate_to: localhost
 
 - name: "Transfer ssl cert files file to loadbalancers"
   synchronize:

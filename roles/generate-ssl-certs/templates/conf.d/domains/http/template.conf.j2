@@ -1,0 +1,15 @@
+server {
+  listen *:80;
+
+  server_name {{ aws_target_domain }};
+  #commented for testing purposes
+  #status_zone "adblock:{{ aws_target_domain }}";
+
+  access_log /var/log/nginx/{{ aws_target_domain }}_d_access.log main;
+
+  include /etc/nginx/conf.d/upstreams_log;
+  include /etc/nginx/conf.d/favicon;
+  include /etc/nginx/conf.d/google_takeme;
+  include /etc/nginx/conf.d/locations_main_include;
+  include /etc/nginx/conf.d/locations_main_adblock;
+}

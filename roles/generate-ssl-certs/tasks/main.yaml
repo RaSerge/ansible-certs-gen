@@ -8,8 +8,6 @@
   file: path="{{ certsgen_output_dir }}/{{ aws_target_domain }}/{{item}}" state=directory
   with_items:
     - ssl-certs
-    - nginx-confs/conf.d/domains/http
-    - nginx-confs/conf.d/domains/https
 
 - name: run cert-gen container and generate certs
   docker_container:
@@ -25,14 +23,6 @@
     keep_volumes: true
     volumes:
       - "{{ certsgen_output_dir }}/{{ aws_target_domain }}/ssl-certs:/etc/letsencrypt"
-
-- name: create nginx confs for current domain
-  template:
-    src: "{{ item }}/template.conf.j2"
-    dest: "{{ certsgen_output_dir }}/{{ aws_target_domain }}/nginx-confs/{{ item }}/{{ aws_target_domain }}"
-  with_items:
-    - conf.d/domains/http
-    - conf.d/domains/https
 
 - name: Synchronization of src on the inventory host to the dest on the localhost in pull mode
   synchronize:
